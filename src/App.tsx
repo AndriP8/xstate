@@ -4,7 +4,12 @@ import { useMachine } from '@xstate/react';
 import { colorMachine } from './machine';
 
 function App() {
-  const [state, send] = useMachine(colorMachine);
+  const [state, send] = useMachine(colorMachine, {
+    context: {
+      age: 22,
+      zodiac: 'Pisces',
+    },
+  });
   const color = state.value as string;
 
   return (
