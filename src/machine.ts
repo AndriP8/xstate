@@ -1,4 +1,4 @@
-import { createMachine } from 'xstate';
+import { createMachine, raise } from 'xstate';
 
 export const colorMachine = createMachine(
   {
@@ -13,18 +13,28 @@ export const colorMachine = createMachine(
       green: {
         on: {
           CHANGE: { target: 'yellow' },
+          CHANGE_TO_PINK: { target: 'blue', actions: raise('CHANGE') },
         },
       },
       yellow: {
         on: {
-          CHANGE: 'blue',
+          CHANGE: { target: 'blue', actions: () => alert('yellow') },
         },
       },
       blue: {
         on: {
-          CHANGE: 'green',
+          CHANGE: {
+            target: 'pink',
+          },
         },
-        exit: ['showAge', 'showZodiac'],
+      },
+      pink: {
+        on: {
+          CHANGE: {
+            target: 'green',
+          },
+        },
+        entry: ['showAge', 'showZodiac'],
       },
     },
   },

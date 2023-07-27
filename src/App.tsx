@@ -19,6 +19,9 @@ function App() {
         <Button m="auto" onClick={() => send('CHANGE')}>
           Change
         </Button>
+        <Button m="auto" onClick={() => send('CHANGE_TO_PINK')}>
+          Change Blue from Green
+        </Button>
       </Flex>
     </Box>
   );
