@@ -46,7 +46,11 @@ export const colorMachine = createMachine(
       green: {
         on: {
           CHANGE: { target: 'yellow' },
-          CHANGE_TO_PINK: { target: 'blue', actions: raise('CHANGE') },
+          CHANGE_TO_PINK: {
+            target: 'blue',
+            actions: raise('CHANGE'),
+            cond: (_context, _event, meta) => meta.state.value === 'green',
+          },
         },
       },
       yellow: {
@@ -56,7 +60,6 @@ export const colorMachine = createMachine(
             // note: action this below doesn't work when invoke function
             // actions: () => alert('yellow'),
           },
-          FETCH: {},
         },
         invoke: {
           id: 'getTodo',
