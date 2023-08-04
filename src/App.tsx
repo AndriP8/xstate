@@ -22,8 +22,16 @@ function App() {
           Change
         </Button>
         <Button m="auto" onClick={() => send('CHANGE_TO_PINK')}>
-          Change Blue from Green
+          Change to Pink from Green
         </Button>
+        {state.value === 'blue' ? (
+          <>
+            <Text>{state.context.counter}</Text>
+            <Button m="auto" onClick={() => send('INC')}>
+              Counter
+            </Button>
+          </>
+        ) : null}
       </Flex>
     </Box>
   );

@@ -12,7 +12,14 @@ type Context = {
   zodiac: string;
   todo: null | Todo;
   todoError: string;
+  counter: number;
 };
+
+type Event =
+  | { type: 'CHANGE' }
+  | { type: 'CHANGE_TO_PINK' }
+  | { type: 'FETCH' }
+  | { type: 'INC' };
 
 const fetchTodo = () =>
   fetch('https://jsonplaceholder.typicode.com/todos/1')
@@ -24,10 +31,7 @@ export const colorMachine = createMachine(
     id: 'light',
     schema: {
       context: {} as Context,
-      events: {} as
-        | { type: 'CHANGE' }
-        | { type: 'CHANGE_TO_PINK' }
-        | { type: 'FETCH' },
+      events: {} as Event,
     },
     predictableActionArguments: true,
     initial: 'green',
@@ -36,6 +40,7 @@ export const colorMachine = createMachine(
       zodiac: 'Leo',
       todo: null,
       todoError: '',
+      counter: 0,
     },
     states: {
       green: {
@@ -72,9 +77,19 @@ export const colorMachine = createMachine(
         },
       },
       blue: {
+        invoke: {
+          id: 'incInterval',
+          src: () => (callback) => {
+            const id = setInterval(() => callback('INC'), 1000);
+            return () => clearInterval(id);
+          },
+        },
         on: {
           CHANGE: {
             target: 'pink',
+          },
+          INC: {
+            actions: assign({ counter: (context) => context.counter + 1 }),
           },
         },
       },
